@@ -35,7 +35,7 @@ for (song_file in song_files) {
 }
 song_df$decade <- ordered(song_df$decade, levels = c("60","70","80","90","00","10"))
 
-glimpse(song_df)
+as_tibble(song_df)
 ```
 The code chunk above takes music datasets from the 1960's, 1970's, 1980's, 1990's, 2000's, and 2010's and puts it together to make a larger dataframe containg all songs from all of the datasets. In addition the column "decade" is added containing the decade of each song. This is relevant for the rest of the PROJECT??? since it will allow us to see various aspects of each decade throughout. 
 
@@ -44,14 +44,14 @@ The code chunk above takes music datasets from the 1960's, 1970's, 1980's, 1990'
 song_df <- song_df %>% 
   select(-c(uri,key,valence,track))
 
-glimpse(song_df)
+as_tibble(song_df)
 ```
 This code chunk is used to get rid of elements of the dataset that are not relevant to this. uri which is the url is not relevant to this as the key song and valence is not relevent ADD STUFF?. track and artist are strings meaning we can't use this in analyzing the data. However, if we wanted to see if there is a different chance for an artist to have a hit given that they have had one previously we could use this. (We would find the first instance of when the artist had a hit and come up with a formula that way)
 
 ```{r}
 hits_only <- filter(song_df,target == 1) 
 
-glimpse(hits_only)
+as_tibble(hits_only)
 ```
 
 
