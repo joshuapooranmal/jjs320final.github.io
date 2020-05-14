@@ -1,6 +1,6 @@
 ---
 title: "final"
-author: "Jacob"
+author: "Jacob Luterman, Shiv Patel, Joshua Pooranmal"
 date: "5/3/2020"
 output:
   html_document:
