@@ -1,0 +1,453 @@
+---
+title: "final"
+author: "Jacob"
+date: "5/3/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(rvest)
+library(tidyverse)
+library(lubridate)
+library(RColorBrewer)
+library(tidymodels)
+options(stringsAsFactors = FALSE)
+
+songs_2010 <- "dataset-of-10s.csv"
+songs_2000 <- "dataset-of-00s.csv"
+songs_1990 <- "dataset-of-90s.csv"
+songs_1980 <- "dataset-of-80s.csv"
+songs_1970 <- "dataset-of-70s.csv"
+songs_1960 <- "dataset-of-60s.csv"
+
+```
+
+
+```{r}
+song_files <- c(songs_2010,songs_2000,songs_1990,songs_1980,songs_1970,songs_1960)
+song_df <- NULL
+for (song_file in song_files){
+  tmp_df <- read.csv(song_file)
+  decade <- str_extract(song_file,"\\d{2}")
+  tmp_df$decade <- decade
+  song_df <- bind_rows(song_df,tmp_df)
+}
+song_df$decade <- ordered(song_df$decade, levels = c("60","70","80","90","00","10"))
+glimpse(song_df)
+
+
+```
+The code chunk above takes music datasets from the 1960's, 1970's, 1980's, 1990's, 2000's, and 2010's and puts it together to make a larger dataframe containg all songs from all of the datasets. In addition the column "decade" is added containing the decade of each song. This is relevant for the rest of the PROJECT??? since it will allow us to see various aspects of each decade throughout. 
+
+
+```{r graph}
+song_df <- song_df %>% 
+  select(-c(uri,key,valence,track))
+glimpse(song_df)
+
+```
+This code chunk is used to get rid of elements of the dataset that are not relevant to this. uri which is the url is not relevant to this as the key song and valence is not relevent ADD STUFF?. track and artist are strings meaning we can't use this in analyzing the data. However, if we wanted to see if there is a different chance for an artist to have a hit given that they have had one previously we could use this. (We would find the first instance of when the artist had a hit and come up with a formula that way)
+
+```{r}
+
+hits_only <- filter(song_df,target == 1) 
+glimpse(hits_only)
+```
+
+
+
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(tempo)
+
+
+```
+The code chunk above looks to compare average tempo between songs that were hits in each decade which is represented by the red color with all songs that were not hits in each decade which is represented by the color blue. Based off of the graph it does not seem that there is a differrence in the tempo between songs that are hits and songs that are not.
+
+
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(energy)
+
+
+```
+energy
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(acousticness)
+
+
+```
+acousticness
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(liveness)
+
+
+```
+livenss
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(duration_ms)
+
+
+```
+duration
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(time_signature)
+
+
+```
+time signature
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(chorus_hit)
+
+
+```
+chorus
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(sections)
+
+
+```
+sections
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(loudness)
+
+
+```
+loudness
+
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(speechiness)
+
+
+```
+speechness
+```{r}
+plot_avg_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade,target) %>% 
+    summarise(avg=mean({{col}})) %>% mutate(target=as.factor(target))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = avg,fill=target),position = "dodge")
+}
+song_df %>% plot_avg_by_decade(instrumentalness)
+
+
+```
+intstrumentalness
+```{r}
+song_df %>% 
+  group_by(decade,artist) %>%
+  summarise(has_hit=max(target))%>%
+  mutate(has_hit=as.factor(has_hit)) %>% 
+  group_by(decade,has_hit)%>% 
+  count -> hit_amount 
+ggplot(hit_amount) + geom_bar(stat="identity", aes(x=decade,y=n,fill=has_hit),position = "dodge")
+  
+
+```
+how many artists have hits
+
+
+
+```{r}
+song_df %>% 
+  group_by(decade) %>%
+  count -> freq
+  ggplot(freq) + geom_bar(stat= "identity",aes(x=decade,y = n),position = "dodge")
+
+
+```
+#how many songs in each decade
+
+
+
+```{r}
+plot_total_hits_by_decade <- function(df,col){
+  
+  plotting <- df %>% group_by(decade) %>% 
+    summarise(hits=sum({{col}}))
+  ggplot(plotting) + geom_bar(stat= "identity",aes(x=decade,y = hits))
+}
+song_df %>% plot_total_hits_by_decade(target)
+
+
+
+
+
+```
+hits per decade
+This graph looks at the total amount of hits per decade. This is relevant because it shows that there was more variance in terms of how many different songs were hits. Leads to questions of how many different artists had hits to see if popularity of artists determined the amount of hits.
+
+
+```{r}
+song_df %>% 
+  group_by(decade,artist) %>%
+  summarise(num_hits=sum(target))%>%
+  mutate(hit_range=cut(num_hits,c(0,1,2,75),right=FALSE,include.lowest = TRUE))%>% 
+  group_by(decade,hit_range)%>% 
+  count -> tot_hit
+ggplot(tot_hit) + geom_bar(stat="identity", aes(x=decade,y=n,fill=hit_range),position = "dodge")
+  
+```
+#Compares artists who had 0 hits with 1 hit and more than 1 hit 
+
+
+```{r}
+song_df %>% 
+  group_by(decade,artist) %>%
+  summarise(num_hits=sum(target))%>%
+  mutate(hit_range=cut(num_hits,c(0,1,2,75),right=FALSE,include.lowest = TRUE))%>% 
+  group_by(decade,hit_range)%>% 
+  count -> tot_hit
+summarise(tot_hit,n)
+
+```
+#compares growth between ranges of hits. seeing how many hits an artist needs before they reach a certain amount of hits --> Stardom? break up this data more to get better precentages for determining the tipping point between "guaranteed hit"
+
+
+```{r}
+song_df %>% 
+  group_by(decade,artist) %>%
+  summarise(num_hits=sum(target))%>%
+  mutate(hit_range=cut(num_hits,c(0,1,2,5,11,21,31,41,75),right=FALSE,include.lowest = TRUE))%>% 
+  group_by(decade,hit_range)%>% 
+  count -> tot_hit
+ggplot(tot_hit) + geom_bar(stat="identity", aes(x=decade,y=n,fill=hit_range),position = "dodge")
+  
+# %of hits from artists who already have one vs % of hits from those who don't(total artists with hits vs total hits starting from the second hit) --> try 
+
+#artist likelihood of having a previous hit affect liklihood of another song becoming a hit (when does the "takeoff happen) #how many hit songs (does it exponentially increase chances of having more) graph of total amount of hits vs how many artists have that many hits
+```
+#shows how many artists had how many hits on ranges in each decade.
+
+
+
+
+
+```{r}
+song_df %>% 
+  group_by(decade,artist) %>%
+  summarise(num_hits=sum(target))%>%
+  mutate(hit_range=cut(num_hits,c(0,1,2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75),right=FALSE,include.lowest = TRUE))%>% 
+  group_by(decade,hit_range)%>% 
+  count -> tot_hit
+summarise(tot_hit,n)
+ggplot(tot_hit) + geom_bar(stat="identity", aes(x=decade,y=n,fill=hit_range),position = "dodge")
+
+```
+
+
+```{r}
+song_df %>% 
+  group_by(decade,artist) %>%
+  summarise(num_hits=sum(target))%>%
+  mutate(hit_range=cut(num_hits,c(0,1,2,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75),right=FALSE,include.lowest = TRUE))%>% 
+  group_by(decade,hit_range)%>% 
+  summarise(n=n()) %>% 
+  ungroup() -> mid_df
+
+hit_ranges <- mid_df %>% ungroup() %>%
+  distinct(hit_range) %>%
+  mutate(join_var = 1)
+
+decades <- mid_df %>% 
+  distinct(decade) %>% 
+  arrange(decade) %>% mutate(join_var = 1)
+all_combo <- hit_ranges %>% 
+  inner_join(decades,by = "join_var") %>% 
+  select(-join_var)
+
+all_combo %>% 
+  left_join(mid_df,by = c("decade","hit_range")) %>% 
+  replace_na(list(n=0)) %>% 
+  group_by(decade) %>% 
+  arrange(hit_range) %>% 
+  mutate(freq = n/sum(n),cum_freq = rev(cumsum(rev(freq)))) %>% 
+  ungroup() -> per_df
+  
+  
+decades <- per_df %>% 
+  distinct(decade) %>% 
+  arrange(decade) %>% 
+  unlist() %>% 
+  unname()
+
+plot_lst = list()
+for (dec in decades) {
+  plot_lst [[dec]] <- ggplot(per_df %>% filter(decade == dec)) + geom_bar(aes(x = hit_range,y=cum_freq), stat = "identity") + ggtitle(dec)
+}
+plot_lst[["60"]]
+plot_lst[["70"]]
+plot_lst[["80"]]
+plot_lst[["90"]]
+plot_lst[["00"]]
+plot_lst[["10"]]
+
+
+
+```
+
+#total hits in each decade will divide each entity going up showing percentages 
+
+#if artist already has a hit go in 'b' else 'a'
+
+
+
+
+
+```{r}
+song_df %>% 
+  select(-c(artist,mode,sections,time_signature)) %>% 
+  mutate(target = as.factor(target))-> update_song_df
+data_split <- initial_split(update_song_df,prop = 0.8)
+data_recipe <- data_split %>% training() %>% recipe(target~.) %>% 
+  step_corr(all_numeric()) %>% 
+  step_center(all_numeric(),-all_outcomes()) %>% 
+  step_scale(all_numeric(),-all_outcomes()) %>% 
+  prep()
+
+data_testing <- data_recipe %>% 
+  bake(testing(data_split))
+data_training <- juice(data_recipe)
+
+```
+data prep
+
+```{r}
+r_forest <- rand_forest(trees = 100, mode = "classification") %>% 
+  set_engine("randomForest") %>% 
+  fit(target~., data = data_training)
+
+
+```
+random forest
+
+```{r}
+r_forest %>%
+  predict(data_testing) %>% 
+  bind_cols(data_testing) -> predictions_r_forest
+  predictions_r_forest %>% 
+    metrics(truth = target,estimate = .pred_class)
+```
+random forest 
+new chunk to prevent the constant running of previous chunk
+based off of our predictions we have an 80% accuracy on unseen data
+
+
+```{r}
+log_reg <- logistic_reg(mode = "classification") %>% 
+  set_engine("glm") %>% 
+  fit(target~., data = data_training)
+log_reg %>% 
+  predict(data_testing) %>% 
+  bind_cols(data_testing) -> predictions_log_reg
+  predictions_log_reg %>% 
+    metrics(truth = target,estimate = .pred_class)
+
+```
+logistic regression
+73% accuracy 
+
+```{r}
+
+
+
+#machine learning model for predicting hits, or determining how a song would become a hit (XGB, logistic regression(linear) determines what variables are importantnt for making hits, or random forest--non linear)
+
+
+
+
+
+
+#different formula potentially for first hit vs afterwards like lets say the song hit #40 would that change if the song was #1 or #100
+
+
+
+#after training models look for equivalent dataset to see if there is something for 2020 so far
+
+#https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset
+#https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/
+#https://towardsdatascience.com/song-popularity-predictor-1ef69735e380
+#might need to scrape billboard top 100 to get the list of songs we need to test -> what about the other elements
+
+#https://github.com/manasreldin/Song-Popularity-Predictor/blob/master/Scrape_BB.ipynb -> datascrape billbaord
+
+#https://github.com/manasreldin/Song-Popularity-Predictor/blob/master/demo.py
+
+#https://github.com/manasreldin/Song-Popularity-Predictor/blob/master/SimpleFeatures.csv
+
+#https://github.com/manasreldin/Song-Popularity-Predictor/blob/master/PredictHotBB.ipynb
+```
+As a result of there not being any significant data to suggest whether or not there is a a difference between tempo we test other aspects of the dataframe to see if there are any indictors to show separation between songs that are hits and songs that are not.
+
+
+
+
