@@ -315,6 +315,15 @@ ggplot(tot_hit) +
 
 
 ```{r}
+log_df = na.omit(song_df)
+
+
+
+```
+logistic regression
+
+
+```{r}
 # create the cross-validation partition
 cv_partition <- createFolds(final_df$Direction, k=5)
 
@@ -376,12 +385,6 @@ compute_auc <- function(curve_df) {
     group_by(fold) %>%
     summarize(auc=pracma::trapz(fpr, tpr))
 }
-
-```
-logistic regression
-
-
-```{r}
 
 
 ```
