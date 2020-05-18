@@ -426,7 +426,12 @@ logistic regression
 ## Multiple Logistic Regression
 
 ```{r}
-musiclog = song_df[,-c(1,2,3,4)]#removing the  X ,track,artist,uri as these cannot be modelled
+
+mus = read.csv("song_df.csv") #read song dataset to variable mus
+
+
+
+musiclog = mus[,-c(1,2,3,4)]#removing the  X ,track,artist,uri as these cannot be modelled
 
 #summary of dataset
 summary(musiclog) 
