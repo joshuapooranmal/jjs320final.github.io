@@ -1,32 +1,38 @@
 ---
-title: "final"
-author: "Jacob"
-date: "5/3/2020"
+title: "CMSC 320 Final Project"
+author: "Jacob Luterman, Joshua Pooranmal, Shiv Patel"
+date: "05/18/2020"
 output: html_document
 ---
 
-```{r}
+Music has the power to culturally, morally, and emotionally influence our society. As time progresses, and popular culture inevitably shifts, diffrent genres of music begin to surface and become popular. Whether it's 1940s swing, 1970s rock-and-roll, or 1990s hip-hop, society's ear for music is constantly changing. In order for record labels (both old and new) to maintain relevance and continue to be proftable, it is important to have some way of keeping up with contemporary society's musical preferences. Playing it by ear is seems like a good idea, but this introduces a lot of subjectivity, which isn't reliable. Tracking user feedback is also a good idea if you're looking to gauge how well a song is currently doing, but the point is to stay ahead of the game, not alongside it. 
+
+So how does one work to predict whether or not a song will be a hit? 
+
+The following 
+
+
+```{r results='hide', message=FALSE, warning=FALSE}
 library(rvest)
 library(tidyverse)
 library(lubridate)
-#library(RColorBrewer)
 library(tidymodels)
-library(caret) #Confusion matrix, algorithm training
-library(mice) #Basic data preprocessing - eg. Removing null values(na.omit)etc
-library(ggplot2)#All plots
-library(ggcorrplot)#All correlation plot
-library(dplyr)#For data manipulation .. eg. selecting numeric variables)
-library(openxlsx)#read excel file
+library(caret) # Confusion matrix, algorithm training
+library(mice) # Basic data preprocessing - eg. Removing null values(na.omit)etc
+library(ggplot2) # All plots
+library(ggcorrplot) # All correlation plot
+library(dplyr) # For data manipulation .. eg. selecting numeric variables)
+library(openxlsx) # read excel file
 library(knitr)
 options(stringsAsFactors = FALSE)
 
+# Datasets retrieved from https://www.kaggle.com/theoverman/the-spotify-hit-predictor-dataset
 songs_2010 <- "dataset-of-10s.csv"
 songs_2000 <- "dataset-of-00s.csv"
 songs_1990 <- "dataset-of-90s.csv"
 songs_1980 <- "dataset-of-80s.csv"
 songs_1970 <- "dataset-of-70s.csv"
 songs_1960 <- "dataset-of-60s.csv"
-
 ```
 
 
@@ -100,7 +106,7 @@ song_df %>%
 ```
 energy
 
-```{r}
+```{r acousticness}
 plot_avg_by_decade <- function(df,col) {
   
   plotting <- df %>% 
